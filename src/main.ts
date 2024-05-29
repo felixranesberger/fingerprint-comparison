@@ -1,6 +1,7 @@
 import './style.css'
 import {getCurrentBrowserFingerPrint} from '@rajesh896/broprint.js'
 import { getFingerprint, setOption } from '@thumbmarkjs/thumbmarkjs'
+// @ts-expect-error - works
 import Fingerprint2 from '@fingerprintjs/fingerprintjs'
 
 function updateFingerprintValue(method: string, value: string) {
@@ -18,9 +19,11 @@ function updateFingerprintValue(method: string, value: string) {
     // fingerprint using thumbmarkjs
     setOption('exclude', ['system.browser.version'])
     const thumbmarkFingerprint = await getFingerprint();
+    // @ts-expect-error - works
     updateFingerprintValue('thumbmark', thumbmarkFingerprint['hash'] ? thumbmarkFingerprint['hash'] : thumbmarkFingerprint);
 
     // fingerprint using fingerprintjs v3
+    // @ts-expect-error - works
     const { load: loadFingerprintJS } = await import('https://openfpcdn.io/fingerprintjs/v3');
     const { get: getFingerprintJSHash } = await loadFingerprintJS();
     const fingerprintJSFingerprint = await getFingerprintJSHash();
