@@ -30,6 +30,21 @@ function updateFingerprintValue(method: string, value: string) {
     updateFingerprintValue('fingerprintjsv3', fingerprintJSFingerprint.visitorId);
 
     // fingerprint using fingerprintjs v2
+    const doFingerprintJSV2 = () => {
+        Fingerprint2.get((components: { value: string}[] ) => {
+            const values = components.map(component => component.value)
+            const murmurHash = Fingerprint2.x64hash128(values.join(''), 31)
+            updateFingerprintValue('fingerprintjsv2', murmurHash)
+        })
+    }
+
+    // @ts-expect-error - works
+    if (window.requestIdleCallback) {
+        requestIdleCallback(doFingerprintJSV2)
+    } else {
+        setTimeout(doFingerprintJSV2, 500)
+    }
+
     requestIdleCallback(() => {
         Fingerprint2.get((components: { value: string}[] ) => {
             const values = components.map(component => component.value)
